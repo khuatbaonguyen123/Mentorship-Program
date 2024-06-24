@@ -101,8 +101,7 @@ FROM members m
 JOIN sales s ON m.customer_id = s.customer_id
 JOIN menu mn ON s.product_id = mn.product_id
 WHERE s.order_date < m.join_date
-GROUP BY s.customer_id
-ORDER BY s.customer_id;
+GROUP BY s.customer_id;
    
 -- 9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
 WITH points_each_sale AS
