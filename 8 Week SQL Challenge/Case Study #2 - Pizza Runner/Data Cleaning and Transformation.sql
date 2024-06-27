@@ -45,6 +45,5 @@ MODIFY pickup_time DATETIME,
 MODIFY distance FLOAT,
 MODIFY duration INTEGER;
 
-SELECT * FROM runner_orders_temp;
 
 

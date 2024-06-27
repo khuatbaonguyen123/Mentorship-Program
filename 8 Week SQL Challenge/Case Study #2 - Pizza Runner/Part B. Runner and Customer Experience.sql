@@ -51,8 +51,7 @@ WHERE cancellation IS NULL;
 select r.runner_id, c.order_id, count(c.pizza_id) as pizza_count, round(r.distance * 60 / r.duration, 2) as avg_speed_km_h
 from customer_orders_temp c join runner_orders_temp r on c.order_id = r.order_id
 where r.cancellation is null
-group by r.runner_id, c.order_id, r.distance, r.duration
-order by r.runner_id;
+group by r.runner_id, c.order_id, r.distance, r.duration;
 
 /* --------------------
 Trends notice:
