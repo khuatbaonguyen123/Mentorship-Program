@@ -48,10 +48,17 @@ FROM runner_orders_temp
 WHERE cancellation IS NULL;
 
 -- 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
-select r.runner_id, c.order_id, count(c.pizza_id) as pizza_count, round(r.distance * 60 / r.duration, 2) as avg_speed_km_h
-from customer_orders_temp c join runner_orders_temp r on c.order_id = r.order_id
-where r.cancellation is null
-group by r.runner_id, c.order_id, r.distance, r.duration;
+SELECT r.runner_id,
+       c.order_id,
+       count(c.pizza_id) AS pizza_count,
+       round(r.distance * 60 / r.duration, 2) AS avg_speed_km_h
+FROM customer_orders_temp c
+JOIN runner_orders_temp r ON c.order_id = r.order_id
+WHERE r.cancellation IS NULL
+GROUP BY r.runner_id,
+         c.order_id,
+         r.distance,
+         r.duration;
 
 /* --------------------
 Trends notice:
