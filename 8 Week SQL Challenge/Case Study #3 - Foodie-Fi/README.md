@@ -70,7 +70,7 @@ FROM small_group_subscription sms
 JOIN plans p ON sms.plan_id = p.plan_id;
 ```
 
-<img width="556" alt="image" src="https://github.com/khuatbaonguyen123/Mentorship-Program/assets/124229814/6a60446c-5ec7-4536-9c10-2694ff7ca66d">
+<img width="300" alt="image" src="https://github.com/khuatbaonguyen123/Mentorship-Program/assets/124229814/6a60446c-5ec7-4536-9c10-2694ff7ca66d">
 
 Based on the results above, I have selected three customers to focus on and will now share their onboarding journey.
 
@@ -93,7 +93,7 @@ FROM subscriptions;
 
 **Answer:**
 
-<img width="159" alt="image" src="https://github.com/khuatbaonguyen123/Mentorship-Program/assets/124229814/d3998ed7-6e8d-4136-9ae3-944f579e3e81">
+<img width="180" alt="image" src="https://github.com/khuatbaonguyen123/Mentorship-Program/assets/124229814/d3998ed7-6e8d-4136-9ae3-944f579e3e81">
 
 ### 2. What is the monthly distribution of trial plan start_date values for our dataset - use the start of the month as the group by value
 
@@ -108,7 +108,7 @@ GROUP BY month(start_date);
 
 **Answer:**
 
-<img width="159" alt="image" src="https://github.com/khuatbaonguyen123/Mentorship-Program/assets/124229814/e6a635ae-1803-4f68-8edd-588a382c4b11">
+<img width="180" alt="image" src="https://github.com/khuatbaonguyen123/Mentorship-Program/assets/124229814/e6a635ae-1803-4f68-8edd-588a382c4b11">
 
 ### 3. What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name.
 
