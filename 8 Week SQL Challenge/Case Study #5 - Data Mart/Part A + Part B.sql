@@ -1,0 +1,93 @@
+/* --------------------
+   PART A: Data Cleansing Steps
+   --------------------*/
+
+-- Create and insert data into the temporary table in one go
+SELECT
+    CONVERT(DATE, week_date, 3) AS week_date,
+    DATEPART(week, CONVERT(DATE, week_date, 3)) AS week_number,
+    DATEPART(month, CONVERT(DATE, week_date, 3)) AS month_number,
+    DATEPART(year, CONVERT(DATE, week_date, 3)) AS calendar_year,
+    region, 
+    platform, 
+    segment,
+    CASE 
+        WHEN RIGHT(segment, 1) = '1' THEN 'Young Adults'
+        WHEN RIGHT(segment, 1) = '2' THEN 'Middle Aged'
+        WHEN RIGHT(segment, 1) IN ('3', '4') THEN 'Retirees'
+        ELSE 'unknown' 
+    END AS age_band,
+    CASE 
+        WHEN LEFT(segment, 1) = 'C' THEN 'Couples'
+        WHEN LEFT(segment, 1) = 'F' THEN 'Families'
+        ELSE 'unknown' 
+    END AS demographic,
+    transactions,
+	CAST(ROUND(sales * 1.00 / transactions, 2) AS DECIMAL(18, 2)) AS avg_transaction,
+    sales
+INTO #clean_weekly_sales
+FROM weekly_sales;
+
+/* --------------------
+   PART B: Data Exploration
+   --------------------*/
+
+-- 1. What day of the week is used for each week_date value?
+SELECT DISTINCT week_date,
+    DATENAME(weekday, week_date) AS week_day
+FROM #clean_weekly_sales;
+
+-- 2. What range of week numbers are missing from the dataset?
+WITH week_number AS (
+    SELECT 1 AS week_number
+    UNION ALL
+    SELECT week_number + 1
+    FROM week_number
+    WHERE week_number < 52
+)
+
+SELECT 
+    wn.week_number
+FROM week_number wn
+LEFT JOIN #clean_weekly_sales ws ON wn.week_number = ws.week_number
+WHERE ws.week_number IS NULL;
+
+-- 3. How many total transactions were there for each year in the dataset?
+SELECT calendar_year AS year, SUM(transactions) as transaction_count
+FROM #clean_weekly_sales
+GROUP BY calendar_year;
+
+SELECT * FROM #clean_weekly_sales;
+
+-- 4. What is the total sales for each region for each month?
+SELECT region, month_number, SUM(sales) as total_sales
+FROM #clean_weekly_sales
+GROUP BY region, month_number
+ORDER BY region;
+
+-- 5. What is the total count of transactions for each platform
+SELECT platform, SUM(transactions) as transaction_count
+FROM #clean_weekly_sales
+GROUP BY platform;
+
+-- 6. What is the percentage of sales for Retail vs Shopify for each month?
+WITH monthly_transactions AS (
+  SELECT 
+    calendar_year, 
+    month_number, 
+    platform, 
+    SUM(sales) AS monthly_sales
+  FROM #clean_weekly_sales
+  GROUP BY calendar_year, month_number, platform
+)
+SELECT 
+  calendar_year, 
+  month_number, 
+  ROUND(100.0 * SUM(CASE WHEN platform = 'Retail' THEN monthly_sales ELSE NULL END) / SUM(monthly_sales), 2) AS retail_percent,
+  ROUND(100.0 * SUM(CASE WHEN platform = 'Shopify'THEN monthly_sales ELSE NULL END) / SUM(monthly_sales), 2) AS shopify_percent
+FROM monthly_transactions
+GROUP BY calendar_year, month_number;
+
+-- 7. What is the percentage of sales by demographic for each year in the dataset?
+-- 8. Which age_band and demographic values contribute the most to Retail sales?
+-- 9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?
