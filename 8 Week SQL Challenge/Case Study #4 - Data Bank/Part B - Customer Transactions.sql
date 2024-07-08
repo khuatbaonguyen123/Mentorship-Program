@@ -46,6 +46,32 @@ WHERE deposit_count > 1
 GROUP BY mth;
 
 -- 4. What is the closing balance for each customer at the end of the month?
+WITH monthly_balances AS (
+  SELECT 
+    customer_id, 
+    MONTH(txn_date) AS month, 
+    SUM(CASE 
+      		WHEN txn_type = 'withdrawal' OR txn_type = 'purchase' THEN -txn_amount
+      		ELSE txn_amount 
+        END) AS monthly_balance
+  FROM customer_transactions
+  GROUP BY customer_id, MONTH(txn_date)
+),
+
+cumulative_balances AS (
+  SELECT 
+    customer_id, 
+    month, 
+    SUM(monthly_balance) OVER (PARTITION BY customer_id ORDER BY month) AS closing_balance
+  FROM monthly_balances
+)
+
+SELECT 
+  customer_id, 
+  month, 
+  COALESCE(closing_balance, 0) AS closing_balance,
+  COALESCE(closing_balance - LAG(closing_balance, 1) OVER (PARTITION BY customer_id ORDER BY month), 0) AS change_in_balance
+FROM cumulative_balances
+ORDER BY customer_id, month;
 
 
--- 5. What is the percentage of customers who increase their closing balance by more than 5%?

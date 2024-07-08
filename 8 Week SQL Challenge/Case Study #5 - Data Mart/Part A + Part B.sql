@@ -32,6 +32,12 @@ FROM weekly_sales;
    PART B: Data Exploration
    --------------------*/
 
+select * from #clean_weekly_sales;
+
+ALTER TABLE #clean_weekly_sales
+ALTER COLUMN sales BIGINT;
+
+
 -- 1. What day of the week is used for each week_date value?
 SELECT DISTINCT week_date,
     DATENAME(weekday, week_date) AS week_day
@@ -89,5 +95,52 @@ FROM monthly_transactions
 GROUP BY calendar_year, month_number;
 
 -- 7. What is the percentage of sales by demographic for each year in the dataset?
+
+SELECT b.calendar_year,
+       a.region,
+       CAST(ROUND((100.00 * a.sale_region / b.total_sale), 2) AS DECIMAL(5, 2)) AS perc_sale_region
+FROM
+  (SELECT calendar_year,
+          region,
+          SUM(sales) AS sale_region
+   FROM #clean_weekly_sales
+   GROUP BY calendar_year,
+            region) a
+JOIN
+  (SELECT calendar_year,
+          SUM(sales) AS total_sale
+   FROM #clean_weekly_sales
+   GROUP BY calendar_year) b ON a.calendar_year = b.calendar_year;
+
 -- 8. Which age_band and demographic values contribute the most to Retail sales?
+
+SELECT a.platform,
+       a.age_band,
+       b.region
+FROM
+  (SELECT TOP 1 platform,
+              age_band,
+              SUM(sales) AS sale_contribute_age_band
+   FROM #clean_weekly_sales
+   WHERE platform = 'Retail'
+   GROUP BY platform,
+            age_band
+   ORDER BY sale_contribute_age_band DESC) a
+JOIN
+  (SELECT TOP 1 platform,
+              region,
+              SUM(sales) AS sale_contribute_region
+   FROM #clean_weekly_sales
+   WHERE platform = 'Retail'
+   GROUP BY platform,
+            region
+   ORDER BY sale_contribute_region DESC) b ON a.platform = b.platform;
+
 -- 9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?
+SELECT 
+  calendar_year, 
+  platform, 
+  ROUND(AVG(avg_transaction), 0) AS avg_transaction_row, 
+  SUM(sales) / SUM(transactions) AS avg_transaction_group
+FROM #clean_weekly_sales
+GROUP BY calendar_year, platform;
