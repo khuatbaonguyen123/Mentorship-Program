@@ -32,8 +32,6 @@ FROM weekly_sales;
    PART B: Data Exploration
    --------------------*/
 
-select * from #clean_weekly_sales;
-
 ALTER TABLE #clean_weekly_sales
 ALTER COLUMN sales BIGINT;
 
@@ -59,20 +57,21 @@ LEFT JOIN #clean_weekly_sales ws ON wn.week_number = ws.week_number
 WHERE ws.week_number IS NULL;
 
 -- 3. How many total transactions were there for each year in the dataset?
-SELECT calendar_year AS year, SUM(transactions) as transaction_count
+SELECT calendar_year AS year, 
+       SUM(transactions) as transaction_count
 FROM #clean_weekly_sales
 GROUP BY calendar_year;
 
-SELECT * FROM #clean_weekly_sales;
-
 -- 4. What is the total sales for each region for each month?
-SELECT region, month_number, SUM(sales) as total_sales
+SELECT region, month_number, 
+	   SUM(sales) as total_sales
 FROM #clean_weekly_sales
 GROUP BY region, month_number
 ORDER BY region;
 
 -- 5. What is the total count of transactions for each platform
-SELECT platform, SUM(transactions) as transaction_count
+SELECT platform, 
+	   SUM(transactions) as transaction_count
 FROM #clean_weekly_sales
 GROUP BY platform;
 
@@ -89,8 +88,8 @@ WITH monthly_transactions AS (
 SELECT 
   calendar_year, 
   month_number, 
-  ROUND(100.0 * SUM(CASE WHEN platform = 'Retail' THEN monthly_sales ELSE NULL END) / SUM(monthly_sales), 2) AS retail_percent,
-  ROUND(100.0 * SUM(CASE WHEN platform = 'Shopify'THEN monthly_sales ELSE NULL END) / SUM(monthly_sales), 2) AS shopify_percent
+  CAST(ROUND(100.00 * SUM(CASE WHEN platform = 'Retail' THEN monthly_sales ELSE NULL END) / SUM(monthly_sales), 2) AS DECIMAL(5, 2)) AS retail_percent,
+  CAST(ROUND(100.00 * SUM(CASE WHEN platform = 'Shopify'THEN monthly_sales ELSE NULL END) / SUM(monthly_sales), 2) AS DECIMAL(5, 2)) AS shopify_percent
 FROM monthly_transactions
 GROUP BY calendar_year, month_number;
 
@@ -144,3 +143,35 @@ SELECT
   SUM(sales) / SUM(transactions) AS avg_transaction_group
 FROM #clean_weekly_sales
 GROUP BY calendar_year, platform;
+
+/* --------------------
+   PART C: Before & After Analysis
+   --------------------*/
+
+-- 1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?
+WITH before_after_changes AS (
+	SELECT 
+        SUM(CASE WHEN week_number BETWEEN 21 AND 24 AND calendar_year = 2020 THEN sales ELSE 0 END) AS total_sales_before,
+        SUM(CASE WHEN week_number BETWEEN 25 AND 28 AND calendar_year = 2020 THEN sales ELSE 0 END) AS total_sales_after
+    FROM #clean_weekly_sales
+)
+SELECT 
+  total_sales_before,
+  total_sales_after,
+  total_sales_after - total_sales_before AS sales_variance, 
+  CAST(ROUND(100.00 * (total_sales_after - total_sales_before) / total_sales_before, 2) AS DECIMAL(5, 2)) AS variance_percent
+FROM before_after_changes;
+
+-- 2. What about the entire 12 weeks before and after?
+WITH before_after_changes AS (
+	SELECT 
+        SUM(CASE WHEN week_number BETWEEN 13 AND 24 AND calendar_year = 2020 THEN sales ELSE 0 END) AS total_sales_before,
+        SUM(CASE WHEN week_number BETWEEN 25 AND 37 AND calendar_year = 2020 THEN sales ELSE 0 END) AS total_sales_after
+    FROM #clean_weekly_sales
+)
+SELECT 
+  total_sales_before,
+  total_sales_after,
+  total_sales_after - total_sales_before AS sales_variance, 
+  CAST(ROUND(100.00 * (total_sales_after - total_sales_before) / total_sales_before, 2) AS DECIMAL(5, 2)) AS variance_percent
+FROM before_after_changes;
