@@ -29,12 +29,12 @@ FROM deposits;
 WITH monthly_transactions AS (
   SELECT 
     customer_id, 
-    MONTH(txn_date) AS mth,
+    DATEPART(month, txn_date) AS mth,
     SUM(CASE WHEN txn_type = 'deposit' THEN 0 ELSE 1 END) AS deposit_count,
     SUM(CASE WHEN txn_type = 'purchase' THEN 0 ELSE 1 END) AS purchase_count,
     SUM(CASE WHEN txn_type = 'withdrawal' THEN 1 ELSE 0 END) AS withdrawal_count
   FROM customer_transactions
-  GROUP BY customer_id, MONTH(txn_date)
+  GROUP BY customer_id, DATEPART(month, txn_date)
 )
 
 SELECT
@@ -43,7 +43,8 @@ SELECT
 FROM monthly_transactions
 WHERE deposit_count > 1 
   AND (purchase_count >= 1 OR withdrawal_count >= 1)
-GROUP BY mth;
+GROUP BY mth
+ORDER BY mth;
 
 -- 4. What is the closing balance for each customer at the end of the month?
 WITH monthly_balances AS (
