@@ -1,3 +1,68 @@
+CREATE DATABASE clothing_store;
+GO
+
+USE clothing_store;
+GO
+
+CREATE TABLE [color] (
+  [id] int PRIMARY KEY,
+  [name] varchar(50),
+  [extra_fee] decimal(5,2)
+)
+GO
+
+CREATE TABLE [customer] (
+  [id] int PRIMARY KEY,
+  [first_name] varchar(50),
+  [last_name] varchar(50),
+  [favorite_color_id] int
+)
+GO
+
+CREATE TABLE [category] (
+  [id] int PRIMARY KEY,
+  [name] varchar(50),
+  [parent_id] int
+)
+GO
+
+CREATE TABLE [clothing] (
+  [id] int PRIMARY KEY,
+  [name] varchar(50),
+  [size] varchar(3),
+  [price] decimal(8,2),
+  [color_id] int,
+  [category_id] int
+)
+GO
+
+CREATE TABLE [clothing_order] (
+  [id] int PRIMARY KEY,
+  [customer_id] int,
+  [clothing_id] int,
+  [items] int,
+  [order_date] date
+)
+GO
+
+ALTER TABLE [customer] ADD FOREIGN KEY ([favorite_color_id]) REFERENCES [color] ([id])
+GO
+
+ALTER TABLE [category] ADD FOREIGN KEY ([parent_id]) REFERENCES [category] ([id])
+GO
+
+ALTER TABLE [clothing] ADD FOREIGN KEY ([color_id]) REFERENCES [color] ([id])
+GO
+
+ALTER TABLE [clothing] ADD FOREIGN KEY ([category_id]) REFERENCES [category] ([id])
+GO
+
+ALTER TABLE [clothing_order] ADD FOREIGN KEY ([customer_id]) REFERENCES [customer] ([id])
+GO
+
+ALTER TABLE [clothing_order] ADD FOREIGN KEY ([clothing_id]) REFERENCES [clothing] ([id])
+GO
+
 -- Inserting data into the color table
 INSERT INTO color (id, name, extra_fee)
 VALUES
