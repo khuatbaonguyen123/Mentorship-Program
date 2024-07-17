@@ -160,5 +160,60 @@ JOIN
     category_total_revenue ctr ON sr.category_id = ctr.category_id;
 
 -- 8. What is the percentage split of total revenue by category?
--- 9. What is the total transaction “penetration” for each product? (hint: penetration = number of transactions where at least 1 quantity of a product was purchased divided by total number of transactions)
+WITH category_revenue AS
+  (SELECT p.category_id,
+          p.category_name,
+          SUM(s.qty * s.price * (100 - s.discount) / 100) AS revenue
+   FROM sales s
+   JOIN product_details p ON s.prod_id = p.product_id
+   GROUP BY p.category_id,
+            p.category_name)
+            
+SELECT category_id,
+       category_name,
+       ROUND(revenue * 100 /
+               (SELECT SUM(revenue)
+                FROM category_revenue), 2) AS revenue_percentage
+FROM category_revenue;
+
+-- 9. What is the total transaction “penetration” for each product? 
+-- (hint: penetration = number of transactions where at least 1 quantity of a product was purchased divided by total number of transactions)
+WITH prod_txn AS
+  (SELECT p.product_id,
+          p.product_name,
+          COUNT(DISTINCT s.txn_id) AS txn_count
+   FROM sales s
+   JOIN product_details p ON s.prod_id = p.product_id
+   GROUP BY p.product_id,
+            p.product_name)
+            
+SELECT product_id,
+       product_name,
+       ROUND(txn_count /
+               (SELECT COUNT(DISTINCT txn_id)
+                FROM sales), 2) AS penetration
+FROM prod_txn;
+
 -- 10. What is the most common combination of at least 1 quantity of any 3 products in a single transaction?
+WITH products AS
+  (SELECT txn_id,
+          product_name
+   FROM sales s
+   JOIN product_details p ON s.prod_id = p.product_id)
+   
+SELECT p.product_name AS prod_1,
+       p1.product_name AS prod_2,
+       p2.product_name AS prod_3,
+       COUNT(*) AS times_bought_together
+FROM products p
+JOIN products p1 ON p.txn_id = p1.txn_id
+AND p.product_name != p1.product_name
+AND p.product_name < p1.product_name
+JOIN products p2 ON p1.txn_id = p2.txn_id
+AND p1.product_name != p2.product_name
+AND p1.product_name < p2.product_name
+GROUP BY p.product_name,
+         p1.product_name,
+         p2.product_name
+ORDER BY times_bought_together DESC
+LIMIT 1;
