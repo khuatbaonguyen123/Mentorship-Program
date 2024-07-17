@@ -25,5 +25,35 @@ SELECT
 FROM revenue_per_txn;
 
 -- 4. What is the average discount value per transaction?
+SELECT txn_id,
+       ROUND(AVG(price * qty * discount / 100), 2) AS avg_discount
+FROM sales
+GROUP BY txn_id;
+
 -- 5. What is the percentage split of all transactions for members vs non-members?
+WITH cte AS
+  (SELECT member,
+          COUNT(DISTINCT txn_id) AS txn_count
+   FROM sales
+   GROUP BY member)
+   
+SELECT member,
+       ROUND(txn_count * 100 /
+               (SELECT SUM(txn_count)
+                FROM cte), 2) AS txn_perc
+FROM cte;
+
 -- 6. What is the average revenue for member transactions and non-member transactions?
+WITH cte AS
+  (SELECT member,
+          txn_id,
+          SUM(price * qty * (100 - discount)) AS revenue
+   FROM sales
+   GROUP BY member,
+            txn_id)
+            
+SELECT member,
+       ROUND(AVG(revenue), 2) AS avg_revenue
+FROM cte
+GROUP BY member;
+
