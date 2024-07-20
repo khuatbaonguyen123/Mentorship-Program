@@ -1230,24 +1230,26 @@ VALUES
   ('51120', 'Foot Health Researchers', 'People reading news and advice on preventing and treating foot health issues.', '2019-04-26 18:00:00', '2019-04-29 14:20:04'),
   ('51678', 'Plumbers', 'Professionals reading industry news and researching products and services for plumbers.', '2019-05-06 22:00:00', '2019-05-07 18:50:04');
   
+SET SQL_SAFE_UPDATES = 0;
+ 
 -- update the null values
 UPDATE fresh_segments.interest_map
 SET interest_summary = NULL
 WHERE interest_summary = '';
 
 CREATE TABLE fresh_segments.interest_metrics (
-  "_month" VARCHAR(4),
-  "_year" VARCHAR(4),
-  "month_year" VARCHAR(7),
-  "interest_id" VARCHAR(5),
-  "composition" FLOAT,
-  "index_value" FLOAT,
-  "ranking" INTEGER,
-  "percentile_ranking" FLOAT
+  `_month` VARCHAR(4),
+  `_year` VARCHAR(4),
+  `month_year` VARCHAR(7),
+  `interest_id` VARCHAR(5),
+  `composition` FLOAT,
+  `index_value` FLOAT,
+  `ranking` INTEGER,
+  `percentile_ranking` FLOAT
 );
 
 INSERT INTO fresh_segments.interest_metrics
-  ("_month", "_year", "month_year", "interest_id", "composition", "index_value", "ranking", "percentile_ranking")
+  (`_month`, `_year`, `month_year`, `interest_id`, `composition`, `index_value`, `ranking`, `percentile_ranking`)
 VALUES
   ('7', '2018', '07-2018', '32486', '11.89', '6.19', '1', '99.86'),
   ('7', '2018', '07-2018', '6106', '9.93', '5.31', '2', '99.73'),
