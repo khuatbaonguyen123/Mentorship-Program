@@ -25,10 +25,14 @@ SELECT
 FROM revenue_per_txn;
 
 -- 4. What is the average discount value per transaction?
-SELECT txn_id,
-       ROUND(AVG(price * qty * discount / 100), 2) AS avg_discount
-FROM sales
-GROUP BY txn_id;
+WITH cte AS
+  (SELECT txn_id,
+          SUM(price * qty * discount / 100) AS discount_value
+   FROM sales
+   GROUP BY txn_id)
+   
+SELECT ROUND(AVG(discount_value), 2) AS avg_discount
+FROM cte;
 
 -- 5. What is the percentage split of all transactions for members vs non-members?
 WITH cte AS

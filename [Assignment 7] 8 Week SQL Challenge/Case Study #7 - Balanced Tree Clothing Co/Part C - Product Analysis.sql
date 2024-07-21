@@ -14,7 +14,7 @@ SELECT p.segment_id,
        p.segment_name,
        SUM(s.qty) AS quantity,
        ROUND(SUM(s.qty * s.price * (100 - s.discount) / 100), 2) AS revenue,
-       SUM(s.discount) AS discount_perc
+       ROUND(SUM(s.discount * s.price / 100), 2) AS discount
 FROM sales s
 JOIN product_details p ON s.prod_id = p.product_id
 GROUP BY p.segment_id,
@@ -49,7 +49,7 @@ SELECT p.category_id,
 	   p.category_name, 
        SUM(s.qty) AS quantity,
        ROUND(SUM(s.qty * s.price * (100 - s.discount) / 100), 2) AS revenue,
-       SUM(s.discount) AS discount_perc
+       ROUND(SUM(s.discount * s.price / 100), 2) AS discount
 FROM sales s
 JOIN product_details p ON s.prod_id = p.product_id 
 GROUP BY p.category_id,
