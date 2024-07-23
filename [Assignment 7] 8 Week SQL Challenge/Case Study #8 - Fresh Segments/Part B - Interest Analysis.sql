@@ -61,6 +61,53 @@ WHERE cumulative_percentage > 90;
 -- I think the decision makes sense since these interests are less valuable and don't represent constant needs of customers. We can remove these interests 
 -- and keep the segmets more targeted and focused to the most popular interests and customers' needs.
 
-
+WITH cumulative_percentage AS
+  (SELECT total_months,
+          interest_count,
+          SUM(interest_count) OVER(
+                                   ORDER BY total_months DESC) AS cumulative_sum,
+          ROUND(SUM(interest_count) OVER (
+                                          ORDER BY total_months DESC) * 100 / SUM(interest_count) OVER(), 2) AS cumulative_percentage
+   FROM month_interest),
+distinct_interest_date AS
+  (SELECT DISTINCT interest_id,
+                   month_year
+   FROM interest_metrics)
+   
+SELECT did.month_year,
+       COUNT(*) AS total_interest,
+       SUM(CASE
+               WHEN cp.cumulative_percentage > 90 THEN 1
+               ELSE 0
+           END) AS excluded_interest
+FROM interest_month im
+JOIN cumulative_percentage cp ON im.total_months = cp.total_months
+JOIN distinct_interest_date did ON im.interest_id = did.interest_id
+WHERE did.month_year IS NOT NULL
+GROUP BY did.month_year;
 
 -- 5. After removing these interests - how many unique interests are there for each month?
+WITH cumulative_percentage AS
+  (SELECT total_months,
+          interest_count,
+          SUM(interest_count) OVER(
+                                   ORDER BY total_months DESC) AS cumulative_sum,
+          ROUND(SUM(interest_count) OVER (
+                                          ORDER BY total_months DESC) * 100 / SUM(interest_count) OVER(), 2) AS cumulative_percentage
+   FROM month_interest),
+distinct_interest_date AS
+  (SELECT DISTINCT interest_id,
+                   _month
+   FROM interest_metrics)
+   
+SELECT did._month,
+       COUNT(*) AS total_interest,
+       SUM(CASE
+               WHEN cp.cumulative_percentage > 90 THEN 0
+               ELSE 1
+           END) AS remained_interest
+FROM interest_month im
+JOIN cumulative_percentage cp ON im.total_months = cp.total_months
+JOIN distinct_interest_date did ON im.interest_id = did.interest_id
+WHERE did._month IS NOT NULL
+GROUP BY did._month;
