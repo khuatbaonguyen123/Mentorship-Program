@@ -4,30 +4,26 @@
         <attribute name="name" value=""/>
         <attribute name="authors" value="Thinkbook"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2024-07-19 10:31:48 PM"/>
+        <attribute name="saved" value="2024-07-23 08:43:36 PM"/>
         <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjE3OjUwIFBNOzMyNzg="/>
-        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjMxOjQ4IFBNOzI7MzM5MA=="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQzOjM2IFBNOzM7MzM5Mw=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
-            <comment text="Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Calculate the sum of all odd numbers in the array."/>
+            <comment text="Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Calculate the sum of all elements in the array."/>
             <declare name="n" type="Integer" array="False" size=""/>
+            <output expression="&quot;Enter integer: &quot;" newline="True"/>
             <input variable="n"/>
             <declare name="a" type="Integer" array="True" size="n"/>
             <declare name="i, sum" type="Integer" array="False" size=""/>
             <assign variable="sum" expression="0"/>
             <for variable="i" start="0" end="n-1" direction="inc" step="1">
                 <assign variable="a[i]" expression="RANDOM(10)"/>
-                <if expression="a[i] % 2 != 0">
-                    <then>
-                        <output expression="a[i]" newline="True"/>
-                        <assign variable="sum" expression="sum + a[i]"/>
-                    </then>
-                    <else/>
-                </if>
+                <output expression="a[i]" newline="True"/>
+                <assign variable="sum" expression="sum + a[i]"/>
             </for>
-            <output expression="&quot;Sum is: &quot; &amp; sum" newline="True"/>
+            <output expression="&quot;Sum of all elements is: &quot; &amp; sum" newline="True"/>
         </body>
     </function>
 </flowgorithm>

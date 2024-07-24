@@ -4,15 +4,17 @@
         <attribute name="name" value=""/>
         <attribute name="authors" value="Thinkbook"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2024-07-19 11:08:41 PM"/>
+        <attribute name="saved" value="2024-07-23 08:44:45 PM"/>
         <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjE3OjUwIFBNOzMyNzg="/>
-        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzExOjA4OjQxIFBNOzM7MzM4OQ=="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQxOjMyIFBNOzE7VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjE3OjUwIFBNO1F1ZXN0aW9uIDEgLSBTdW0gYXJyYXkuZnByZzs5MTg4"/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQ0OjQ1IFBNOzU7MzM5Ng=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
             <comment text="Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Calculate the sum of all prime numbers in the array."/>
             <declare name="n" type="Integer" array="False" size=""/>
+            <output expression="&quot;Enter integer: &quot;" newline="True"/>
             <input variable="n"/>
             <declare name="a" type="Integer" array="True" size="n"/>
             <declare name="i, sum" type="Integer" array="False" size=""/>
@@ -27,7 +29,7 @@
                     <else/>
                 </if>
             </for>
-            <output expression="&quot;Sum is: &quot; &amp; sum" newline="True"/>
+            <output expression="&quot;Sum of all prime numbers of the array is: &quot; &amp; sum" newline="True"/>
         </body>
     </function>
     <function name="isPrime" type="Boolean" variable="prime">

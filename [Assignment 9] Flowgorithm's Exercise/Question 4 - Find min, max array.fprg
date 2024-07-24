@@ -4,15 +4,17 @@
         <attribute name="name" value=""/>
         <attribute name="authors" value="Thinkbook"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2024-07-20 11:12:55 AM"/>
+        <attribute name="saved" value="2024-07-23 08:45:24 PM"/>
         <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjE3OjUwIFBNOzMyNzg="/>
-        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIwOzExOjEyOjU1IEFNOzY7MzM2OQ=="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQyOjA4IFBNOzE7VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjE3OjUwIFBNO1F1ZXN0aW9uIDEgLSBTdW0gYXJyYXkuZnByZzs5MTky"/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQ1OjI0IFBNOzg7MzM5Nw=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
             <comment text="Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Find the minimum and maximum values in the array."/>
             <declare name="n" type="Integer" array="False" size=""/>
+            <output expression="&quot;Enter integer: &quot;" newline="True"/>
             <input variable="n"/>
             <declare name="a" type="Integer" array="True" size="n"/>
             <declare name="i" type="Integer" array="False" size=""/>
@@ -20,7 +22,7 @@
                 <assign variable="a[i]" expression="RANDOM(10)"/>
                 <output expression="a[i]" newline="True"/>
             </for>
-            <output expression="&quot;Max is: &quot; &amp; max(a, n) &amp; &quot;, Min is: &quot; &amp; min(a, n)" newline="True"/>
+            <output expression="&quot;Maximum value of the array is: &quot; &amp; max(a, n) &amp; &quot;, Minimum value of the array is: &quot; &amp; min(a, n)" newline="True"/>
         </body>
     </function>
     <function name="max" type="Integer" variable="max">

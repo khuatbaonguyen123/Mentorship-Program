@@ -4,15 +4,17 @@
         <attribute name="name" value=""/>
         <attribute name="authors" value="Thinkbook"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2024-07-20 11:02:08 AM"/>
+        <attribute name="saved" value="2024-07-23 08:42:17 PM"/>
         <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIwOzA4OjU2OjI3IEFNOzMyNjk="/>
-        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIwOzExOjAyOjA4IEFNOzM7MzM2Mw=="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQyOjE2IFBNOzE7VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTE5OzEwOjE3OjUwIFBNO1F1ZXN0aW9uIDEgLSBTdW0gYXJyYXkuZnByZzs5MTkx"/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIzOzA4OjQyOjE3IFBNOzQ7MzM5Mg=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
             <comment text="Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Sort the elements in ascending and descending order."/>
             <declare name="n" type="Integer" array="False" size=""/>
+            <output expression="&quot;Enter integer: &quot;" newline="True"/>
             <input variable="n"/>
             <declare name="a" type="Integer" array="True" size="n"/>
             <declare name="i" type="Integer" array="False" size=""/>
