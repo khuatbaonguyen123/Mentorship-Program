@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value=""/>
+        <attribute name="authors" value="Thinkbook"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2024-07-28 01:56:15 PM"/>
+        <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI0OzEwOjEwOjQwIFBNOzMyNjY="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI1OzA5OjQwOjA1IEFNOzE7VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIwOzA4OjU2OjI3IEFNO1F1ZXN0aW9uIDUgLSBTb3J0IGFycmF5LmZwcmc7OTI4NQ=="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI4OzAxOjU2OjE1IFBNOzk7MzM5OA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <output expression="&quot;Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Find the element that appears the most times in the array.&quot;" newline="True"/>
+            <declare name="n" type="Integer" array="False" size=""/>
+            <output expression="&quot;Enter the size of the array (n): &quot;" newline="True"/>
+            <input variable="n"/>
+            <declare name="a" type="Integer" array="True" size="n"/>
+            <call expression="generateRandomArray(a, n)"/>
+            <output expression="&quot;Elements of the array: &quot;" newline="False"/>
+            <call expression="printArray(a, n)"/>
+            <output expression="&quot;The most frequent elements of the array are: &quot;" newline="False"/>
+            <call expression="printMostFrequentElement(a, n)"/>
+        </body>
+    </function>
+    <function name="count" type="Integer" variable="count">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+            <parameter name="element" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="count, i" type="Integer" array="False" size=""/>
+            <assign variable="count" expression="0"/>
+            <for variable="i" start="0" end="n - 1" direction="inc" step="1">
+                <if expression="element = a[i]">
+                    <then>
+                        <assign variable="count" expression="count + 1"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="generateRandomArray" type="None" variable="">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <assign variable="a[i]" expression="RANDOM(10)"/>
+            </for>
+        </body>
+    </function>
+    <function name="maxCount" type="Integer" variable="maxCount">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="maxCount, i" type="Integer" array="False" size=""/>
+            <assign variable="maxCount" expression="count(a, n, a[0])"/>
+            <for variable="i" start="0" end="n - 1" direction="inc" step="1">
+                <if expression="count(a, n, a[i]) &gt; maxCount">
+                    <then>
+                        <assign variable="maxCount" expression="count(a, n, a[i])"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="printArray" type="None" variable="">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <if expression="i != n - 1">
+                    <then>
+                        <output expression="a[i] &amp; &quot;, &quot;" newline="False"/>
+                    </then>
+                    <else>
+                        <output expression="a[i]" newline="True"/>
+                    </else>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="printMostFrequentElement" type="None" variable="mostFrequent">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="mostFrequent, maxCount, i, j" type="Integer" array="False" size=""/>
+            <assign variable="maxCount" expression="maxCount(a, n)"/>
+            <declare name="count" type="Integer" array="True" size="n"/>
+            <for variable="i" start="0" end="n - 1" direction="inc" step="1">
+                <assign variable="count[i]" expression="count(a, n, a[i])"/>
+            </for>
+            <for variable="i" start="0" end="n - 1" direction="inc" step="1">
+                <if expression="count[i] = maxCount">
+                    <then>
+                        <output expression="a[i] &amp; &quot; &quot;" newline="False"/>
+                        <for variable="j" start="i" end="n - 1" direction="inc" step="1">
+                            <if expression="a[j] = a[i]">
+                                <then>
+                                    <assign variable="count[j]" expression="0"/>
+                                </then>
+                                <else/>
+                            </if>
+                        </for>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+</flowgorithm>
