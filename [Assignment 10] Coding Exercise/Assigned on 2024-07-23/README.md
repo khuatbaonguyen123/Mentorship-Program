@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class App {
+public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static Random rand = new Random();
@@ -50,40 +50,52 @@ public class App {
     public static void main(String[] args) throws Exception {
         //Get the size of the array from user
         System.out.print("Enter the size of the array (n): ");
-        int n = scanner.nextInt();
+        int n = readInteger();
 
-        int[] a = new int[n];
-
-        generateRandomArray(a);
+        int[] arr = new int[n];
+        generateRandomArray(arr);
 
         System.out.print("Elements of the array: ");
-        printArray(a);
+        printArray(arr);
 
-        findAndPrintMostFrequentElement(a);
+        findAndPrintMostFrequentElement(arr);
     }
 
-    public static void generateRandomArray(int[] a) {
-        int n = a.length;
+    // Make sure the input is integer
+    private static int readInteger() {
+        while(!scanner.hasNextInt()) {
+            System.out.print("Invalid input. Enter again: ");
+            scanner.nextLine();
+        }
+
+        return scanner.nextInt();
+    } 
+
+    // Generate random array with each element ranging from 0 to 9
+    private static void generateRandomArray(int[] arr) {
+        int n = arr.length;
         for(int i = 0; i < n; ++i) {
-            a[i] = rand.nextInt(10);
+            arr[i] = rand.nextInt(10);
         }
     }
 
-    public static void printArray(int[] a) {
-        int n = a.length;
+    // Print the array
+    private static void printArray(int[] arr) {
+        int n = arr.length;
         for(int i = 0; i < n; ++i) {
-            System.out.print(a[i] + " ");
+            System.out.print(arr[i] + " ");
         }
         System.out.print("\n");
     }
 
-    public static void findAndPrintMostFrequentElement(int[] a) {
+    // Find & print most frequent elements of the array (An array can have more than 1 most frequent element)
+    public static void findAndPrintMostFrequentElement(int[] arr) {
         HashMap<Integer, Integer> frequencyMap = new HashMap<>();
-        for (int num : a) {
+        for (int num : arr) {
             frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
         }
 
-        int maxCount = frequencyMap.get(a[0]);
+        int maxCount = frequencyMap.get(arr[0]);
 
         for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
             if (entry.getValue() > maxCount) {
@@ -122,7 +134,7 @@ Given an integer n, create an array of n elements, each randomly ranging from 0 
 
 - **_Main Function_**
 
-<img width="337" alt="Flow Chart  Delete element at a given position in the array - Main" src="https://github.com/user-attachments/assets/a998884f-9185-418a-8af5-de720cbf7c80">
+<img width="321" alt="Flow Chart  Delete element at a given position in the array - Main" src="https://github.com/user-attachments/assets/e4d59194-20df-4e48-9011-03163b957194">
 
 #### Java Code:
 
@@ -131,8 +143,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+
     private static Scanner scanner = new Scanner(System.in);
     private static Random rand = new Random();
+
     public static void main(String[] args) throws Exception {
         //Get the size of the array from user
         System.out.print("Enter the size of the array (n): ");
@@ -145,14 +159,14 @@ public class Main {
         printArray(arr);
 
         System.out.print("Enter the position to delete: ");
-        int pos = inputPos(n);
+        int pos = readPosition(n);
 
         arr = deleteElement(arr, pos);
 
         printArray(arr);
     }
 
-    // Make sure the input is integer
+   // Make sure the input is integer
     private static int readInteger() {
         while(!scanner.hasNextInt()) {
             System.out.print("Invalid input. Enter again: ");
@@ -163,7 +177,7 @@ public class Main {
     } 
 
     // Make sure the position is valid
-    private static int inputPos(int arrayLength) {
+    private static int readPosition(int arrayLength) {
         int pos = readInteger();
 
         while(pos < 0 || pos > arrayLength - 1) {
@@ -175,18 +189,18 @@ public class Main {
     }
 
     // Generate random array with each element ranging from 0 to 9
-    private static void generateRandomArray(int[] a) {
-        int n = a.length;
+    private static void generateRandomArray(int[] arr) {
+        int n = arr.length;
         for(int i = 0; i < n; ++i) {
-            a[i] = rand.nextInt(10);
+            arr[i] = rand.nextInt(10);
         }
     }
 
     // Print the array
-    private static void printArray(int[] a) {
-        int n = a.length;
+    private static void printArray(int[] arr) {
+        int n = arr.length;
         for(int i = 0; i < n; ++i) {
-            System.out.print(a[i] + " ");
+            System.out.print(arr[i] + " ");
         }
         System.out.print("\n");
     }
@@ -229,7 +243,7 @@ Given an integer n, create an array of n elements, each randomly ranging from 0 
 
 - **_Main Function_**
 
-<img width="337" alt="Flow Chart  Insert element at a given position in the array - Main" src="https://github.com/user-attachments/assets/549fcac6-4667-4dbb-bc23-b00082f615c6">
+<img width="321" alt="Flow Chart  Insert element at a given position in the array - Main" src="https://github.com/user-attachments/assets/49bdccae-efd4-409c-a171-1ee3e3cac393">
 
 #### Java Code:
 
@@ -238,8 +252,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    
     private static Scanner scanner = new Scanner(System.in);
     private static Random rand = new Random();
+
     public static void main(String[] args) throws Exception {
         //Get the size of the array from user
         System.out.print("Enter the size of the array (n): ");
@@ -252,7 +268,7 @@ public class Main {
         printArray(arr);
 
         System.out.print("Enter the position to insert: ");
-        int pos = inputPos(n);
+        int pos = readPosition(n);
 
         System.out.print("Enter the value to insert: ");
         int value = readInteger();
@@ -273,7 +289,7 @@ public class Main {
     } 
 
     // Make sure the position is valid
-    private static int inputPos(int arrayLength) {
+    private static int readPosition(int arrayLength) {
         int pos = readInteger();
 
         while(pos < 0 || pos > arrayLength - 1) {
@@ -285,18 +301,18 @@ public class Main {
     }
 
     // Generate random array with each element ranging from 0 to 9
-    private static void generateRandomArray(int[] a) {
-        int n = a.length;
+    private static void generateRandomArray(int[] arr) {
+        int n = arr.length;
         for(int i = 0; i < n; ++i) {
-            a[i] = rand.nextInt(10);
+            arr[i] = rand.nextInt(10);
         }
     }
 
     // Print the array
-    private static void printArray(int[] a) {
-        int n = a.length;
+    private static void printArray(int[] arr) {
+        int n = arr.length;
         for(int i = 0; i < n; ++i) {
-            System.out.print(a[i] + " ");
+            System.out.print(arr[i] + " ");
         }
         System.out.print("\n");
     }

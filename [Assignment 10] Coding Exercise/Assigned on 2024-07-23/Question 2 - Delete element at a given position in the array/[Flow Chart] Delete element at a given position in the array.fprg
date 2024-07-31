@@ -4,15 +4,15 @@
         <attribute name="name" value=""/>
         <attribute name="authors" value="Thinkbook"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2024-07-29 08:19:08 PM"/>
+        <attribute name="saved" value="2024-07-31 10:49:29 AM"/>
         <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI0OzEwOjEwOjQwIFBNOzMyNjY="/>
         <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI1OzA5OjQwOjA1IEFNOzE7VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIwOzA4OjU2OjI3IEFNO1F1ZXN0aW9uIDUgLSBTb3J0IGFycmF5LmZwcmc7OTI4NQ=="/>
-        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI5OzA4OjE5OjA4IFBNOzEyOzM0NDk="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTMxOzEwOjQ5OjI5IEFNOzEzOzM0Mjc="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
-            <output expression="&quot;Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Find the element that appears the most times in the array.&quot;" newline="True"/>
+            <output expression="&quot;Given an integer n, create an array of n elements, each randomly ranging from 0 to 9. Delete an element at a given position in the array.&quot;" newline="True"/>
             <declare name="n, pos" type="Integer" array="False" size=""/>
             <output expression="&quot;Enter the size of the array (n): &quot;" newline="True"/>
             <input variable="n"/>
