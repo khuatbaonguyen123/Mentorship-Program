@@ -4,10 +4,10 @@
         <attribute name="name" value=""/>
         <attribute name="authors" value="Thinkbook"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2024-07-28 01:56:15 PM"/>
+        <attribute name="saved" value="2024-08-01 10:17:33 AM"/>
         <attribute name="created" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI0OzEwOjEwOjQwIFBNOzMyNjY="/>
         <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI1OzA5OjQwOjA1IEFNOzE7VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTIwOzA4OjU2OjI3IEFNO1F1ZXN0aW9uIDUgLSBTb3J0IGFycmF5LmZwcmc7OTI4NQ=="/>
-        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA3LTI4OzAxOjU2OjE1IFBNOzk7MzM5OA=="/>
+        <attribute name="edited" value="VGhpbmtib29rO0RFU0tUT1AtTTg0VDNWRTsyMDI0LTA4LTAxOzEwOjE3OjMzIEFNOzEyOzM0MTQ="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -20,7 +20,7 @@
             <call expression="generateRandomArray(a, n)"/>
             <output expression="&quot;Elements of the array: &quot;" newline="False"/>
             <call expression="printArray(a, n)"/>
-            <output expression="&quot;The most frequent elements of the array are: &quot;" newline="False"/>
+            <output expression="&quot;The most frequent element(s) of the array: &quot;" newline="False"/>
             <call expression="printMostFrequentElement(a, n)"/>
         </body>
     </function>
@@ -31,6 +31,7 @@
             <parameter name="element" type="Integer" array="False"/>
         </parameters>
         <body>
+            <comment text="Return the number of times the element appears in the array"/>
             <declare name="count, i" type="Integer" array="False" size=""/>
             <assign variable="count" expression="0"/>
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
@@ -49,6 +50,7 @@
             <parameter name="n" type="Integer" array="False"/>
         </parameters>
         <body>
+            <comment text="Fill the array with random integers between 0 and 9&#10;"/>
             <declare name="i" type="Integer" array="False" size=""/>
             <for variable="i" start="0" end="n-1" direction="inc" step="1">
                 <assign variable="a[i]" expression="RANDOM(10)"/>
@@ -61,6 +63,7 @@
             <parameter name="n" type="Integer" array="False"/>
         </parameters>
         <body>
+            <comment text="Find and return the highest frequency (the most common element count) in the array"/>
             <declare name="maxCount, i" type="Integer" array="False" size=""/>
             <assign variable="maxCount" expression="count(a, n, a[0])"/>
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
@@ -79,6 +82,7 @@
             <parameter name="n" type="Integer" array="False"/>
         </parameters>
         <body>
+            <comment text="Print all elements of the array"/>
             <declare name="i" type="Integer" array="False" size=""/>
             <for variable="i" start="0" end="n-1" direction="inc" step="1">
                 <if expression="i != n - 1">
@@ -98,6 +102,7 @@
             <parameter name="n" type="Integer" array="False"/>
         </parameters>
         <body>
+            <comment text="Identify and print the most frequent element(s) in the array"/>
             <declare name="mostFrequent, maxCount, i, j" type="Integer" array="False" size=""/>
             <assign variable="maxCount" expression="maxCount(a, n)"/>
             <declare name="count" type="Integer" array="True" size="n"/>
