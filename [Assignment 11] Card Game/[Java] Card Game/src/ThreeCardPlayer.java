@@ -1,16 +1,16 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class ThreeCardPlayer implements IHandPlayer{
 
     private int id;
     private String name;
     private List<Card> hand;
 
-    public Player(int id, String name) {
+    public ThreeCardPlayer(int id, String name) {
         this.id = id;
         this.name = name;
-        hand = new ArrayList<>();
+        this.hand = new ArrayList<>();        
     }
 
     public int getID() {
@@ -29,14 +29,12 @@ public class Player {
         this.name = name;
     }
 
+    @Override
     public List<Card> getHand() {
         return hand;
     }
 
-    public void setHandEmpty() {
-        hand.clear();
-    }
-
+    @Override
     public void addCardToHand(Card card) {
         hand.add(card);
     }
