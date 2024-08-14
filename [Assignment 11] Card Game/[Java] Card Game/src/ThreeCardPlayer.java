@@ -1,32 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreeCardPlayer implements IHandPlayer{
+public class ThreeCardPlayer extends Player implements IHandPlayer {
 
-    private int id;
-    private String name;
     private List<Card> hand;
 
     public ThreeCardPlayer(int id, String name) {
-        this.id = id;
-        this.name = name;
-        this.hand = new ArrayList<>();        
-    }
-
-    public int getID() {
-        return id;
-    }
-
-    public void setID(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        super(id, name);
+        this.hand = new ArrayList<>();
     }
 
     @Override
@@ -37,6 +18,11 @@ public class ThreeCardPlayer implements IHandPlayer{
     @Override
     public void addCardToHand(Card card) {
         hand.add(card);
+    }
+
+    @Override
+    public void addCardToHand(List<Card> cards) {
+        hand.addAll(cards);
     }
 
 }
