@@ -25,4 +25,9 @@ public class ThreeCardPlayer extends Player implements IHandPlayer {
         hand.addAll(cards);
     }
 
+    @Override
+    public boolean isHandEmpty() {
+        return hand.isEmpty();
+    }
+
 }
