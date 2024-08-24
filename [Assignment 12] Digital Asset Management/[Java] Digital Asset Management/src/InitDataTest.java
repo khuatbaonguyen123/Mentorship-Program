@@ -1,33 +1,21 @@
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class InitDataTest {
-
+    
     @Test
-    public void InitUserTest() {
-        User user = new User(4, "Katy");
+    public void initUserDataTest() {
+        User user = new User("Nguyen");
 
-        Assert.assertEquals("Katy", user.getName());
+        Assert.assertNotNull(user.getDrives());
+        Assert.assertNotNull(user.getStores());
     }
 
     @Test
-    public void InitDriveTest() {
-        Drive drive = new Drive(1, "Google Drive");
+    public void initDriveDataTest() {
+        Drive drive = new Drive("Google Drive");
 
-        Assert.assertEquals("Google Drive", drive.getName());
-    }
-
-    @Test
-    public void InitFolderTest() {
-        Folder folder = new Folder(1, "Mentorship");
-
-        Assert.assertEquals("Mentorship", folder.getName());
-    }
-
-    @Test
-    public void InitFileTest() {
-        File file = new File(8, "year1.pdf");
-
-        Assert.assertEquals("year1.pdf", file.getName());
+        Assert.assertNotNull(drive.getChildrenStores());
+        Assert.assertNotNull(drive.getPermissions());
     }
 }

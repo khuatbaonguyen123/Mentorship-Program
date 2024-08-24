@@ -2,49 +2,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Drive {
+    private String driveName;
+    private User owner;
+    private List<Store> childrenStores;
 
-    private int id;
-    private String name;
-    private List<Folder> folders;
-    private List<File> files;
+    private List<DriveUserPermission> permissions;
 
-    public Drive(int id, String name) {
-        this.id = id;
-        this.name = name;
-        folders = new ArrayList<>();
-        files = new ArrayList<>();
+    public Drive(String driveName) {
+        this.driveName = driveName;
+        childrenStores = new ArrayList<>();
+        permissions = new ArrayList<>();
     }
 
-    public int getId() {
-        return this.id;
+    public String getDriveName() {
+        return this.driveName;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDriveName(String driveName) {
+        this.driveName = driveName;
     }
 
-    public String getName() {
-        return this.name;
+    public User getOwner() {
+        return this.owner;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOwner(User owner) {
+        this.owner = owner;
+        permissions.add(new DriveUserPermission(owner, Permission.ADMIN, this));
     }
 
-    public List<Folder> getFolders() {
-        return folders;
+    public List<Store> getChildrenStores() {
+        return this.childrenStores;
     }
 
-    public List<File> getFiles() {
-        return files;
+    public List<DriveUserPermission> getPermissions() {
+        return this.permissions;
     }
 
-    public void addFolder(Folder folder) {
-        folders.add(folder);
+    public void setPermissions(List<DriveUserPermission> permissions) {
+        this.permissions = permissions;
     }
 
-    public void addFile(File file) {
-        files.add(file);
+    public void addPermission(DriveUserPermission permission) {
+        permissions.add(permission);
+    }
+
+    public void addChild(Store store) {
+        childrenStores.add(store);
+    }
+
+    public Permission checkPermission(User user) {
+        for (DriveUserPermission driveUserPermission : permissions) {
+            if (driveUserPermission.getUser() == user) {
+                return driveUserPermission.getPermission();
+            }
+        }
+
+        return null;
     }
 
 }

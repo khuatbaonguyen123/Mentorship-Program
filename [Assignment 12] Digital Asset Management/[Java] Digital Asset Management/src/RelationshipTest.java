@@ -1,5 +1,7 @@
 import org.junit.Test;
 import org.junit.Assert;
+import java.util.Map;
+import java.util.HashMap;
 
 public class RelationshipTest {
 
@@ -28,14 +30,24 @@ public class RelationshipTest {
         Assert.assertEquals(2, drive.getFolders().size());
     }
 
+    // search files and folders - common file extension icon
+    // 
+
     @Test
     public void DriveHasMultipleFilesTest() {
+        Map<String, String> fileExtensionIcons = new HashMap<>();
+
+        fileExtensionIcons.put("pdf", "/source/pdficon.png");
+        fileExtensionIcons.put("docx", "/source/docxicon.png");
+
         Drive drive = new Drive(1, "Google Drive");
 
         drive.addFile(new File(11, "BABOK.pdf"));
         drive.addFile(new File(12, "Digital Asset Requirement.docx"));
 
         Assert.assertEquals(2, drive.getFiles().size());
+
+
     }
 
     @Test
@@ -103,4 +115,5 @@ public class RelationshipTest {
         Assert.assertEquals(1, mentorship.getSubFolders().get(0).getFiles().size());
         Assert.assertEquals(1, mentorship.getSubFolders().get(1).getFiles().size());
     }
+
 }
