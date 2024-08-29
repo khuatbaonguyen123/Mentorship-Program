@@ -126,7 +126,7 @@ public class PermissionInheritanceTest {
     }
 
     @Test
-    public void FolderInheritPermissionFromGrandparentDriveTest() {
+    public void folderInheritPermissionFromGrandparentDriveTest() {
         Folder designDocuments = new Folder("Design Document");
         Folder wireFrames = new Folder("Wireframes");
 
@@ -152,7 +152,7 @@ public class PermissionInheritanceTest {
     }
 
     @Test
-    public void FileInheritPermissionFromGrandparentFolderTest() {
+    public void fileInheritPermissionFromGrandparentFolderTest() {
         Folder designDocuments = new Folder("Design Document");
         Folder prototypes = new Folder("Prototypes");
         File blueprints = new File("Blueprints.docx");
@@ -184,7 +184,7 @@ public class PermissionInheritanceTest {
     }
 
     @Test
-    public void DriveCannotInheritPermissionFromGrandchildTest() {
+    public void driveCannotInheritPermissionFromGrandchildTest() {
         Folder designDocuments = new Folder("Design Document");
         Folder prototypes = new Folder("Prototypes");
         File blueprints = new File("Blueprints.docx");
