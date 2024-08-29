@@ -2,34 +2,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Store {
-    protected String storeName;
-    protected Long size;
-
+    protected String name;
     protected User owner;
-    protected Store parentStore;
-    protected Drive parentDrive;
 
-    protected List<StoreUserPermission> permissions;
+    protected List<UserPermission> permissions;
 
-    public Store(String storeName) {
-        this.storeName = storeName;
+    public Store(String name) {
+        this.name = name;
         permissions = new ArrayList<>();
     }
 
-    public String getStoreName() {
-        return this.storeName;
+    public String getName() {
+        return this.name;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public Long getSize() {
-        return this.size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public User getOwner() {
@@ -38,23 +26,31 @@ public abstract class Store {
 
     public void setOwner(User owner) {
         this.owner = owner;
+        permissions.add(new UserPermission(owner, this, Permission.ADMIN));
     }
 
-    public Drive getParentDrive() {
-        return this.parentDrive;
-    }
-
-    public void setParentDrive(Drive parentDrive) {
-        this.parentDrive = parentDrive;
-    }
-
-    public Store getParentStore() {
-        return this.parentStore;
-    }
-
-    public List<StoreUserPermission> getPermissions() {
+    public List<UserPermission> getPermissions() {
         return this.permissions;
     }
 
+    public void setPermissions(List<UserPermission> permissions) {
+        this.permissions = permissions;
+    }
 
+    public void addPermission(User user, Permission permission) {
+        permissions.add(new UserPermission(user, this, permission));
+        propagatePermission(user, permission);
+    }
+
+    public Permission checkPermission(User user) {
+        for (UserPermission permission : permissions) {
+            if (permission.getUser() == user) {
+                return permission.getPermission();
+            }
+        }
+
+        return null;
+    }
+
+    public abstract void propagatePermission(User user, Permission permission);
 }

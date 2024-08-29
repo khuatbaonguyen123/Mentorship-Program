@@ -1,20 +1,33 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Folder extends Store {
-    private List<Store> childrenStore;
+public class Folder extends Item {
+    private List<Item> childItems;
 
-    public Folder(String folderName) {
-        super(folderName);
-        childrenStore = new ArrayList<>();
+    public Folder(String name) {
+        super(name);
+        childItems = new ArrayList<>();
     }
 
-    public List<Store> getSubStores() {
-        return this.childrenStore;
+    public List<Item> getChildItems() {
+        return this.childItems;
     }
 
-    public void setSubStores(List<Store> subStores) {
-        this.childrenStore = subStores;
+    public void setChildItems(List<Item> childItems) {
+        this.childItems = childItems;
+    }
+
+    @Override
+    public void propagatePermission(User user, Permission permission) {
+        for (Item item : childItems) {
+            item.addPermission(user, permission);
+
+            item.propagatePermission(user, permission);
+        }
+    }
+
+    public void addItem(Item item) {
+        childItems.add(item);
     }
 
 }

@@ -6,12 +6,9 @@ public class User {
 
     private List<Drive> drives;
 
-    private List<Store> stores;
-
     public User(String name) {
         this.name = name;
         drives = new ArrayList<>();
-        stores = new ArrayList<>();
     }
 
     public String getName() {
@@ -23,19 +20,7 @@ public class User {
     }
 
     public List<Drive> getDrives() {
-        return this.drives;
-    }
-
-    public void setDrives(List<Drive> drives) {
-        this.drives = drives;
-    }
-
-    public List<Store> getStores() {
-        return this.stores;
-    }
-
-    public void setStores(List<Store> stores) {
-        this.stores = stores;
+        return drives;
     }
 
     public void addDrive(Drive drive) {
@@ -43,26 +28,15 @@ public class User {
         drive.setOwner(this);
     }
 
-    public boolean addStore(Drive drive, Store store) {
-        if(this.hasAdminPermission(drive) || this.hasContributorPermission(drive)) {
-            drive.addChild(store);
-            store.setOwner(this);
+    public boolean addItem(Item item, Drive drive) {
+        Permission drivePermission = drive.checkPermission(this);
 
+        if (drivePermission == Permission.ADMIN || drivePermission == Permission.CONTRIBUTOR) {
+            drive.addItem(item);
+            item.setOwner(this);
             return true;
-        }
+        } 
 
         return false;
-    }
-
-    private boolean hasContributorPermission(Drive drive) {
-        Permission permission = drive.checkPermission(this);
-
-        return permission == Permission.CONTRIBUTOR;
-    }
-
-    private boolean hasAdminPermission(Drive drive) {
-        Permission permission = drive.checkPermission(this);
-
-        return permission == Permission.ADMIN;
     }
 }

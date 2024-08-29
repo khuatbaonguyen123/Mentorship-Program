@@ -1,7 +1,12 @@
-public class File extends Store{
+public class File extends Item {
+    
+    public File(String name) {
+        super(name);
+    }
 
-    public File(String storeName) {
-        super(storeName);
+    @Override
+    public void propagatePermission(User user, Permission permission) {
+        // Do nothing, it has no child
     }
     
 }

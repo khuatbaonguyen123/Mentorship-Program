@@ -1,9 +1,11 @@
-public abstract class UserPermission {
-    protected User user;
-    protected Permission permission;
+public class UserPermission {
+    private User user;
+    private Store store;
+    private Permission permission;
 
-    public UserPermission(User user, Permission permission) {
+    public UserPermission(User user, Store store, Permission permission) {
         this.user = user;
+        this.store = store;
         this.permission = permission;
     }
 
@@ -15,6 +17,14 @@ public abstract class UserPermission {
         this.user = user;
     }
 
+    public Store getStore() {
+        return this.store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+    
     public Permission getPermission() {
         return this.permission;
     }

@@ -8,14 +8,13 @@ public class InitDataTest {
         User user = new User("Nguyen");
 
         Assert.assertNotNull(user.getDrives());
-        Assert.assertNotNull(user.getStores());
     }
 
     @Test
     public void initDriveDataTest() {
         Drive drive = new Drive("Google Drive");
 
-        Assert.assertNotNull(drive.getChildrenStores());
+        Assert.assertNotNull(drive.getChildItems());
         Assert.assertNotNull(drive.getPermissions());
     }
 }

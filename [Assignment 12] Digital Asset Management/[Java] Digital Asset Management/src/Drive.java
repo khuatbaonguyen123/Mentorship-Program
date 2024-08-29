@@ -1,64 +1,33 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Drive {
-    private String driveName;
-    private User owner;
-    private List<Store> childrenStores;
+public class Drive extends Store {
 
-    private List<DriveUserPermission> permissions;
+    private List<Item> childItems;
 
-    public Drive(String driveName) {
-        this.driveName = driveName;
-        childrenStores = new ArrayList<>();
-        permissions = new ArrayList<>();
+    public Drive (String name) {
+        super(name);
+        childItems = new ArrayList<>();
     }
 
-    public String getDriveName() {
-        return this.driveName;
+    public List<Item> getChildItems() {
+        return this.childItems;
     }
 
-    public void setDriveName(String driveName) {
-        this.driveName = driveName;
+    public void setChildItems(List<Item> childItems) {
+        this.childItems = childItems;
     }
 
-    public User getOwner() {
-        return this.owner;
+    public void addItem(Item item) {
+        childItems.add(item);
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-        permissions.add(new DriveUserPermission(owner, Permission.ADMIN, this));
-    }
-
-    public List<Store> getChildrenStores() {
-        return this.childrenStores;
-    }
-
-    public List<DriveUserPermission> getPermissions() {
-        return this.permissions;
-    }
-
-    public void setPermissions(List<DriveUserPermission> permissions) {
-        this.permissions = permissions;
-    }
-
-    public void addPermission(DriveUserPermission permission) {
-        permissions.add(permission);
-    }
-
-    public void addChild(Store store) {
-        childrenStores.add(store);
-    }
-
-    public Permission checkPermission(User user) {
-        for (DriveUserPermission driveUserPermission : permissions) {
-            if (driveUserPermission.getUser() == user) {
-                return driveUserPermission.getPermission();
-            }
+    @Override
+    public void propagatePermission(User user, Permission permission) {
+        for (Item item : childItems) {
+            item.addPermission(user, permission);
+            item.propagatePermission(user, permission);
         }
-
-        return null;
     }
-
+    
 }
