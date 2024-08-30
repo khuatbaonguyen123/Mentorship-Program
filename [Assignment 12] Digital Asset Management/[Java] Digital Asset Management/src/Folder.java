@@ -20,7 +20,7 @@ public class Folder extends Item {
     @Override
     public void propagatePermission(User user, Permission permission) {
         for (Item item : childItems) {
-            item.addPermission(user, permission);
+            item.grantPermission(user, permission);
 
             item.propagatePermission(user, permission);
         }

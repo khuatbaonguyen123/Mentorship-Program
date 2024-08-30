@@ -37,8 +37,10 @@ public abstract class Store {
         this.permissions = permissions;
     }
 
-    public void addPermission(User user, Permission permission) {
+    public void grantPermission(User user, Permission permission) {
+        permissions.removeIf(up -> up.getUser().equals(user));
         permissions.add(new UserPermission(user, this, permission));
+
         propagatePermission(user, permission);
     }
 

@@ -7,8 +7,24 @@ public class PermissionInheritanceTest {
     private static User Alex, Jordan, Taylor;
     private static Drive oneDrive, googleDrive;
 
+    private static Folder designDocuments, developmentFiles;
+    private static File marketingMaterials;
+
+    private static Folder wireframes, prototypes;
+    private static File mockUp;
+
+    private static Folder initialDrafts;
+    private static File blueprints;
+
     @Before
     public void setUpUserDrive() {
+        addDrivesToUser();
+        addFolersAndFilesToDrive();
+        addFoldersAndFilesToFolder();
+        addFoldersAndFilesToSubfolder();
+    }
+
+    private void addDrivesToUser() {
         Alex = new User("Alex");
         Jordan = new User("Jordan");
         Taylor = new User("Taylor");
@@ -19,183 +35,127 @@ public class PermissionInheritanceTest {
         Alex.addDrive(googleDrive);
         Alex.addDrive(oneDrive);
     }
-    
-    @Test
-    public void fileInheritPermissionFromParentDriveTest() {
-        File marketingMaterials = new File("Marketing Materials.pdf");
 
-        // Alex.addItem(marketingMaterials, googleDrive);
-        googleDrive.addItem(marketingMaterials);
-
-        // Check this logic later in the role's behavior test, now just assume we
-        // can set permission for drive directly
-        // Alex.grantPermission(Jordan, googleDrive, Permission.CONTRIBUTOR);
-
-        googleDrive.addPermission(Jordan, Permission.CONTRIBUTOR);
-
-        Assert.assertTrue(marketingMaterials.checkPermission(Jordan) == Permission.CONTRIBUTOR);
-    }
-
-    @Test
-    public void folderInheritPermissionFromParentDriveTest() {
-        Folder designDocument = new Folder("Design Documents");
-
-        googleDrive.addItem(designDocument);
-
-        googleDrive.addPermission(Jordan, Permission.CONTRIBUTOR);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, designDocument.checkPermission(Jordan));
-    }
-
-    @Test
-    public void driveCannotInheritPermissionFromChildFolderTest() {
-        Folder designDocument = new Folder("Design Documents");
-
-        googleDrive.addItem(designDocument);
-
-        googleDrive.addPermission(Taylor, Permission.READER);
-        designDocument.addPermission(Taylor, Permission.CONTRIBUTOR);
-
-        Assert.assertEquals(Permission.READER, googleDrive.checkPermission(Taylor));
-    }
-
-    @Test
-    public void driveCannotInheritPermissionFromChildFileTest() {
-        File marketingMaterials = new File("Marketing Materials.pdf");
-
-        googleDrive.addItem(marketingMaterials);
-
-        googleDrive.addPermission(Jordan, Permission.CONTRIBUTOR);
-        marketingMaterials.addPermission(Jordan, Permission.ADMIN);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, googleDrive.checkPermission(Jordan));
-    }
-
-    @Test
-    public void fileInheritPermissionFromParentFolderTest() {
-        Folder designDocuments = new Folder("Design Document");
-        File mockUp = new File("Mock Up.pdf");
+    private void addFolersAndFilesToDrive() {
+        designDocuments = new Folder("Design Documents");
+        developmentFiles = new Folder("Development Files");
+        marketingMaterials = new File("Marketing Materials.pdf");
 
         googleDrive.addItem(designDocuments);
+        googleDrive.addItem(developmentFiles);
+        googleDrive.addItem(marketingMaterials); 
+    }
+
+    private void addFoldersAndFilesToFolder() {
+        wireframes = new Folder("Wireframes");
+        prototypes = new Folder("Prototypes");
+        mockUp = new File("Mockup.png");
+
+        designDocuments.addItem(wireframes);
+        designDocuments.addItem(prototypes);
         designDocuments.addItem(mockUp);
+    }
 
-        designDocuments.addPermission(Taylor, Permission.CONTRIBUTOR);
+    private void addFoldersAndFilesToSubfolder() {
+        initialDrafts = new Folder("Inital Drafts");
+        blueprints = new File("Blueprints.docx");
 
-        Assert.assertEquals(Permission.CONTRIBUTOR, mockUp.checkPermission(Taylor));
+        wireframes.addItem(initialDrafts);
+        wireframes.addItem(blueprints);
     }
 
     @Test
-    public void folderInheritPermissionFromParentFolderTest() {
-        Folder designDocuments = new Folder("Design Document");
-        Folder wireFrames = new Folder("Wireframes");
-
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(wireFrames);
-
-        designDocuments.addPermission(Taylor, Permission.CONTRIBUTOR);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, wireFrames.checkPermission(Taylor));
-    }
-
-    @Test
-    public void parentFolderCannotInheritPermissionFromChildFolderTest() {
-        Folder designDocuments = new Folder("Design Document");
-        Folder wireFrames = new Folder("Wireframes");
-
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(wireFrames);
-
-        designDocuments.addPermission(Jordan, Permission.CONTRIBUTOR);
-        wireFrames.addPermission(Jordan, Permission.ADMIN);
+    public void childItemsInheritPermissionFromParentDriveTest() {
+        googleDrive.grantPermission(Jordan, Permission.CONTRIBUTOR);
 
         Assert.assertEquals(Permission.CONTRIBUTOR, designDocuments.checkPermission(Jordan));
+        Assert.assertEquals(Permission.CONTRIBUTOR, developmentFiles.checkPermission(Jordan));
+        Assert.assertEquals(Permission.CONTRIBUTOR, marketingMaterials.checkPermission(Jordan));
     }
 
     @Test
-    public void parentFolderCannotInheritPermissionFromChildFileTest() {
-        Folder designDocuments = new Folder("Design Document");
-        File mockUp = new File("Mock Up.pdf");
+    public void driveCannotInheritPermissionFromChildItemTest() {
+        designDocuments.grantPermission(Jordan, Permission.ADMIN);
 
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(mockUp);
-
-        designDocuments.addPermission(Taylor, Permission.CONTRIBUTOR);
-        mockUp.addPermission(Taylor, Permission.READER);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, designDocuments.checkPermission(Jordan));
+        Assert.assertEquals(null, googleDrive.checkPermission(Jordan));
     }
 
     @Test
-    public void folderInheritPermissionFromGrandparentDriveTest() {
-        Folder designDocuments = new Folder("Design Document");
-        Folder wireFrames = new Folder("Wireframes");
+    public void grandchildItemInheritPermissionFromDriveTest() {
+        googleDrive.grantPermission(Jordan, Permission.CONTRIBUTOR);
 
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(wireFrames);
-
-        googleDrive.addPermission(Jordan, Permission.CONTRIBUTOR);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, wireFrames.checkPermission(Jordan));
+        Assert.assertEquals(Permission.CONTRIBUTOR, wireframes.checkPermission(Jordan));
     }
 
     @Test
-    public void fileInheritPermissionFromGrandparentDriveTest() {
-        Folder designDocuments = new Folder("Design Document");
-        File mockUp = new File("Mock Up.pdf");
+    public void driveCannotInheritPermissionFromGrandchildItemTest() {
+        wireframes.grantPermission(Jordan, Permission.READER);
 
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(mockUp);
-
-        googleDrive.addPermission(Jordan, Permission.CONTRIBUTOR);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, mockUp.checkPermission(Jordan));
+        Assert.assertEquals(null, googleDrive.checkPermission(Jordan));
     }
 
     @Test
-    public void fileInheritPermissionFromGrandparentFolderTest() {
-        Folder designDocuments = new Folder("Design Document");
-        Folder prototypes = new Folder("Prototypes");
-        File blueprints = new File("Blueprints.docx");
+    public void childItemsInheritPermissionFromFolderTest() {
+        designDocuments.grantPermission(Jordan, Permission.ADMIN);
 
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(prototypes);
-        prototypes.addItem(blueprints);
-
-        designDocuments.addPermission(Taylor, Permission.CONTRIBUTOR);
-
-        Assert.assertEquals(Permission.CONTRIBUTOR, blueprints.checkPermission(Taylor));
+        Assert.assertEquals(Permission.ADMIN, wireframes.checkPermission(Jordan));
+        Assert.assertEquals(Permission.ADMIN, prototypes.checkPermission(Jordan));
+        Assert.assertEquals(Permission.ADMIN, mockUp.checkPermission(Jordan));
     }
 
     @Test
-    public void folderCannotInheritPermissionFromSubfolderFileTest() {
-        Folder designDocuments = new Folder("Design Document");
-        Folder prototypes = new Folder("Prototypes");
-        File blueprints = new File("Blueprints.docx");
+    public void folderCannotInheritPermissionFromChildItemTest() {
+        wireframes.grantPermission(Jordan, Permission.CONTRIBUTOR);
 
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(prototypes);
-        prototypes.addItem(blueprints);
-
-        designDocuments.addPermission(Alex, Permission.ADMIN);
-        prototypes.addPermission(Alex, Permission.READER);
-        blueprints.addPermission(Alex, Permission.CONTRIBUTOR);     
-        
-        Assert.assertEquals(Permission.ADMIN, designDocuments.checkPermission(Alex));
+        Assert.assertEquals(null, designDocuments.checkPermission(Jordan));
     }
 
     @Test
-    public void driveCannotInheritPermissionFromGrandchildTest() {
-        Folder designDocuments = new Folder("Design Document");
-        Folder prototypes = new Folder("Prototypes");
-        File blueprints = new File("Blueprints.docx");
+    public void grandchildItemInheritPermissionFromFolderTest() {
+        designDocuments.grantPermission(Jordan, Permission.CONTRIBUTOR);
 
-        googleDrive.addItem(designDocuments);
-        designDocuments.addItem(prototypes);
-        prototypes.addItem(blueprints);
+        Assert.assertEquals(Permission.CONTRIBUTOR, initialDrafts.checkPermission(Jordan));
+        Assert.assertEquals(Permission.CONTRIBUTOR, blueprints.checkPermission(Jordan));
+    }
 
-        googleDrive.addPermission(Jordan, Permission.CONTRIBUTOR);
-        blueprints.addPermission(Jordan, Permission.READER);
+    @Test
+    public void folderCannotInheritPermissionFromGrandchildItemTest() {
+        initialDrafts.grantPermission(Jordan, Permission.CONTRIBUTOR);
 
-        Assert.assertEquals(Permission.CONTRIBUTOR, googleDrive.checkPermission(Jordan));
+        Assert.assertEquals(null, designDocuments.checkPermission(Jordan));
+    }
+
+    @Test
+    public void permissionPropagationThroughHierarchyTest() {
+        googleDrive.grantPermission(Taylor, Permission.READER);
+
+        Assert.assertEquals(Permission.READER, designDocuments.checkPermission(Taylor));
+        Assert.assertEquals(Permission.READER, developmentFiles.checkPermission(Taylor));
+        Assert.assertEquals(Permission.READER, marketingMaterials.checkPermission(Taylor));
+
+        Assert.assertEquals(Permission.READER, wireframes.checkPermission(Taylor));
+        Assert.assertEquals(Permission.READER, prototypes.checkPermission(Taylor));
+        Assert.assertEquals(Permission.READER, mockUp.checkPermission(Taylor));
+
+        Assert.assertEquals(Permission.READER, initialDrafts.checkPermission(Taylor));
+        Assert.assertEquals(Permission.READER, blueprints.checkPermission(Taylor));        
+    }
+
+    @Test
+    public void childItemOverrideInheritedPermissionTest() {
+        googleDrive.grantPermission(Taylor, Permission.READER);
+        designDocuments.grantPermission(Taylor, Permission.ADMIN);
+
+        Assert.assertEquals(Permission.ADMIN, designDocuments.checkPermission(Taylor));
+    }
+
+    @Test
+    public void grandChildItemOverrideInheritedPermissionTest() {
+        googleDrive.grantPermission(Taylor, Permission.READER);
+
+        // wireframes is child of designDocuments so it's a grandchild of googleDrive
+        wireframes.grantPermission(Taylor, Permission.ADMIN);
+
+        Assert.assertEquals(Permission.ADMIN, wireframes.checkPermission(Taylor));
     }
 }
