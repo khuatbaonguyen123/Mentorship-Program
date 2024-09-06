@@ -57,6 +57,7 @@ public abstract class Store {
         propagatePermission(user, role);
     }
 
+    // trả về phải dùng get (check phải return true/false - xem lại cách đặt tên hàm)
     public Role checkPermission(User user) {
         for (UserPermission permission : permissions) {
             if (permission.getUser() == user) {
@@ -64,7 +65,7 @@ public abstract class Store {
             }
         }
 
-        return null;
+        return null; // ko được return null - ko transparent - throw exception
     }
 
     public abstract void propagatePermission(User user, Role role);

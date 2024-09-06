@@ -7,37 +7,36 @@ import roles.Role;
 
 public class Drive extends Store {
 
-    private List<Item> childItems;
+    private List<Store> childStores;
 
     public Drive (String name) {
         super(name);
-        childItems = new ArrayList<>();
+        childStores = new ArrayList<>();
     }
 
-    public List<Item> getChildItems() {
-        return this.childItems;
+    public List<Store> getChildStores() {
+        return this.childStores;
     }
 
-    public void setChildItems(List<Item> childItems) {
-        this.childItems = childItems;
+    public void setChildStores(List<Store> childStores) {
+        this.childStores = childStores;
     }
 
-    public void addItem(Item item) {
-        childItems.add(item);
-        item.setParentStore(this);
+    public void addStore(Store Store) {
+        childStores.add(Store);
     }
 
     @Override
     public void propagatePermission(User user, Role role) {
-        for (Item item : childItems) {
-            item.grantPermission(user, role);
-            item.propagatePermission(user, role);
+        for (Store Store : childStores) {
+            Store.grantPermission(user, role);
+            Store.propagatePermission(user, role);
         }
     }
 
-    public void deleteItem(Item item) {
-        if(childItems.contains(item)) {
-            childItems.remove(item);
+    public void deleteStore(Store Store) {
+        if(childStores.contains(Store)) {
+            childStores.remove(Store);
         } 
     }
 
@@ -45,12 +44,12 @@ public class Drive extends Store {
     public void delete() {
         this.markAsDeleted();
         
-        for(Item item : childItems) {
-            item.delete();
+        for(Store Store : childStores) {
+            Store.delete();
         }
     }
 
-    public boolean contains(Item item) {
-        return childItems.contains(item);
+    public boolean contains(Store Store) {
+        return childStores.contains(Store);
     }
 }

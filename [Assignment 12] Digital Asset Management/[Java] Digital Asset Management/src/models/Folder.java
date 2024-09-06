@@ -5,43 +5,45 @@ import java.util.List;
 
 import roles.Role;
 
-public class Folder extends Item {
-    private List<Item> childItems;
+public class Folder extends Container {
 
     public Folder(String name) {
         super(name);
-        childItems = new ArrayList<>();
+        childStores = new ArrayList<>();
     }
 
-    public List<Item> getChildItems() {
-        return this.childItems;
+    public List<Store> getChildStores() {
+        return this.childStores;
     }
 
-    public void setChildItems(List<Item> childItems) {
-        this.childItems = childItems;
+    public void setChildStores(List<Store> childStores) {
+        this.childStores = childStores;
     }
 
     @Override
     public void propagatePermission(User user, Role role) {
-        for (Item item : childItems) {
-            item.grantPermission(user, role);
+        for (Store Store : childStores) {
+            Store.grantPermission(user, role);
 
-            item.propagatePermission(user, role);
+            Store.propagatePermission(user, role);
         }
     }
 
-    public void addItem(Item item) {
-        childItems.add(item);
-        item.setParentStore(this);
+    public void addStore(Store Store) {
+        childStores.add(Store);
     }
 
     @Override
     public void delete() {
         this.markAsDeleted();
         
-        for(Item item : childItems) {
-            item.delete();
+        for(Store Store : childStores) {
+            Store.delete();
         }
+    }
+
+    public boolean contains(Store Store) {
+        return childStores.contains(Store);
     }
 
 }

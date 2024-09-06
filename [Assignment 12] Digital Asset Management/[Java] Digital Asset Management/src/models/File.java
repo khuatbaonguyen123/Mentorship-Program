@@ -2,7 +2,7 @@ package models;
 
 import roles.Role;
 
-public class File extends Item {
+public class File extends Store {
     
     public File(String name) {
         super(name);
@@ -16,6 +16,5 @@ public class File extends Item {
     @Override
     public void delete() {
         this.markAsDeleted();
-    }
-    
+    }  
 }

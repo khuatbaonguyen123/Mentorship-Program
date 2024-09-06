@@ -36,27 +36,39 @@ public class User {
     /*
      * This method is only to demo what it's like to use ||
      */
-    // public boolean addItem(Item item, Drive drive) {
+    // public boolean addStore(Store Store, Drive drive) {
     //     Permission drivePermission = drive.checkPermission(this);
 
     //     if (drivePermission == Permission.ADMIN || drivePermission == Permission.CONTRIBUTOR) {
-    //         drive.addItem(item);
-    //         item.setOwner(this);
+    //         drive.addStore(Store);
+    //         Store.setOwner(this);
     //         return true;
     //     } 
 
     //     return false;
     // }
 
-    public void addItem(Item item, Drive drive) {
+    public void addStore(Store Store, Drive drive) {
         Role thisUserRole = drive.checkPermission(this);
         RoleBehavior roleBehavior = RoleBehaviorMap.getRoleBehavior(thisUserRole);
 
-        if(roleBehavior.canAdd()) {
-            drive.addItem(item);
-            item.setOwner(this);
+        if(roleBehavior.canAdd() && !drive.isDeleted()) {
+            drive.addStore(Store);
+            Store.setOwner(this);
         } else {
-            throw new IllegalStateException("User does not have the required permission to add items to drive.");
+            throw new IllegalStateException("User does not have the required permission to add Stores to drive.");
+        }
+    }
+
+    public void addStore(Store Store, Folder folder) {
+        Role thisUserRole = folder.checkPermission(this);
+        RoleBehavior roleBehavior = RoleBehaviorMap.getRoleBehavior(thisUserRole);
+
+        if(roleBehavior.canAdd() && !folder.isDeleted()) {
+            folder.addStore(Store);
+            Store.setOwner(this);
+        } else {
+            throw new IllegalStateException("User does not have the required permission to add Stores to folder.");
         }
     }
 
@@ -64,10 +76,10 @@ public class User {
         Role thisUserRole = store.checkPermission(this);
         RoleBehavior roleBehavior = RoleBehaviorMap.getRoleBehavior(thisUserRole);
 
-        if(roleBehavior.canDelete()) {
+        if(roleBehavior.canDelete() && !store.isDeleted()) {
             store.delete();
         } else {
-            throw new IllegalStateException("User does not have the required permission to delete items in drive.");
+            throw new IllegalStateException("User does not have the required permission to delete.");
         }
     }
 
@@ -75,7 +87,7 @@ public class User {
         Role thisUserRole = store.checkPermission(this);
         RoleBehavior roleBehavior = RoleBehaviorMap.getRoleBehavior(thisUserRole);
 
-        if(roleBehavior.canGrantPermission()) {
+        if(roleBehavior.canGrantPermission() && !store.isDeleted()) {
             store.grantPermission(user, role);
         } else {
             throw new IllegalStateException("User does not have the required permission to grant access.");
@@ -86,10 +98,21 @@ public class User {
         Role storePermission = store.checkPermission(this);
         RoleBehavior roleBehavior = RoleBehaviorMap.getRoleBehavior(storePermission);
 
-        if(roleBehavior.canModify()) {
+        if(roleBehavior.canModify() && !store.isDeleted()) {
             store.setName(newName);
         } else {
             throw new IllegalStateException("User does not have the required permission to modify name.");
+        }
+    }
+
+    public boolean canRead(Store store) {
+        Role storePermission = store.checkPermission(this);
+        RoleBehavior roleBehavior = RoleBehaviorMap.getRoleBehavior(storePermission);
+    
+        if(roleBehavior.canRead() && !store.isDeleted()) {
+            return true; // Permission granted
+        } else {
+            throw new IllegalStateException("User does not have the required permission to view the contents.");
         }
     }
 }
