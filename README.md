@@ -4,7 +4,7 @@ Welcome to my **Mentorship Program Portfolio**! This repository showcases my han
 
 ## 🌟 About the Mentorship Program
 
-This program is designed and led by **Mr Dao Vo**, current CTO of bbv Viet Nam. My growth has been supported by my Mr Dao and other mentors, who have all played vital roles in enhancing my technical skills and problem-solving abilities through thoughtfully designed projects and exercises.
+This program is designed and led by **Mr Dao Vo**, current CTO of bbv Viet Nam. My growth has been supported by Mr Dao and other mentors, who have all played vital roles in enhancing my technical skills and problem-solving abilities through thoughtfully designed projects and exercises.
 
 ## 📂 Repository Structure
 
