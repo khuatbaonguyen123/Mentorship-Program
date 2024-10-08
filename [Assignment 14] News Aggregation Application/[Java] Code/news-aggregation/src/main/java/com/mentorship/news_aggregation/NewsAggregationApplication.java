@@ -1,4 +1,4 @@
-package mentorship.news_aggregation;
+package com.mentorship.news_aggregation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,68 +1,66 @@
-package mentorship.news_aggregation.model;
+package com.mentorship.news_aggregation.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "RSS")
+@Table(name = "rss")
 public class Rss {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "title")
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "link")
+    @Column(nullable = false)
     private String link;
 
-    @Column(name = "description")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "language")
     private String language;
 
     @Column(name = "pub_date")
-    private Date pubDate;
-
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
-    @Column(name = "extra_fields", columnDefinition = "json")
-    private String extraFields;  // Store JSON as a String
+    private LocalDateTime pubDate;
 
     @ManyToOne
-    @JoinColumn(name = "source_id", referencedColumnName = "id")
-    private RssSource source;
+    @JoinColumn(name = "source_id", nullable = false)
+    private RssSource rssSource;
 
-    @OneToMany(mappedBy = "rss_id")
-    private List<News> newsItems;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Constructor
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(name = "extra_fields", columnDefinition = "JSON")
+    private String extraFields;
+
+    @OneToMany(mappedBy = "rss", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<News> newsItems = new ArrayList<>();
+
     public Rss() {}
 
-    public Rss(String title, String link, String description, String language, String extraFields, RssSource source) {
+    // Constructor
+    public Rss(String title, String link, String description, String language, LocalDateTime pubDate, RssSource rssSource) {
         this.title = title;
         this.link = link;
         this.description = description;
         this.language = language;
-        this.extraFields = extraFields;  // Set the JSON string
-        this.source = source;
-        this.createdAt = new Date();  // Initialize with the current date
-        this.updatedAt = new Date();  // Initialize with the current date
+        this.pubDate = pubDate;
+        this.rssSource = rssSource;
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,27 +96,35 @@ public class Rss {
         this.language = language;
     }
 
-    public Date getPubDate() {
+    public LocalDateTime getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(Date pubDate) {
+    public void setPubDate(LocalDateTime pubDate) {
         this.pubDate = pubDate;
     }
 
-    public Date getCreatedAt() {
+    public RssSource getRssSource() {
+        return rssSource;
+    }
+
+    public void setRssSource(RssSource rssSource) {
+        this.rssSource = rssSource;
+    }
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -128,14 +134,6 @@ public class Rss {
 
     public void setExtraFields(String extraFields) {
         this.extraFields = extraFields;
-    }
-
-    public RssSource getSource() {
-        return source;
-    }
-
-    public void setSource(RssSource source) {
-        this.source = source;
     }
 
     public List<News> getNewsItems() {

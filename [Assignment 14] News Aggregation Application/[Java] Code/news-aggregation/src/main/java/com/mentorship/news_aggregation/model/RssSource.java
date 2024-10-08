@@ -1,26 +1,27 @@
-package mentorship.news_aggregation.model;
+package com.mentorship.news_aggregation.model;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "RssSource")
+@Table(name = "rss_source")
 public class RssSource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "name")
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "website_url")
+    @Column(name = "website_url", nullable = false)
     private String websiteUrl;
 
-    @OneToMany(mappedBy = "source")
-    private List<Rss> rssFeeds;
+    @OneToMany(mappedBy = "rssSource", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rss> rssFeeds = new ArrayList<>();
 
-    // Constructor
     public RssSource() {}
 
     public RssSource(String name, String websiteUrl) {
@@ -29,11 +30,11 @@ public class RssSource {
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
