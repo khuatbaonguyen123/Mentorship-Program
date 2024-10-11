@@ -44,6 +44,23 @@ public class RssService {
         }
     }
 
+    public static boolean isRSSLink(String urlString) {
+        try {
+            // Create a URL object
+            URL url = new URL(urlString);
+
+            // Use ROME to parse the feed
+            SyndFeedInput input = new SyndFeedInput();
+            SyndFeed feed = input.build(new XmlReader(url));
+
+            // If feed parsing is successful, it is an RSS or Atom feed
+            return true;
+
+        } catch (IllegalArgumentException | FeedException | IOException e) {
+            // If an exception is thrown, it is not a valid RSS/Atom feed
+            return false;
+        }
+    }
 
     // Phương thức lấy RSS feed từ URL
     private SyndFeed getFeedFromUrl(String rssUrl) {

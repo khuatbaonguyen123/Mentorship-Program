@@ -20,12 +20,14 @@ public class RssSourceService {
         Document doc = Jsoup.connect(url).get();
 
         // Look for 'link' tags that have rel='alternate' and type='application/rss+xml'
-        Elements rssElements = doc.select("link[type=application/rss+xml]");
+        Elements rssElements = doc.getElementsByTag("a");
 
         // Extract the href attribute of each RSS link
         for (Element element : rssElements) {
             String rssLink = element.attr("href");
-            rssLinks.add(rssLink);
+            if(RssService.isRSSLink(rssLink)) {
+                rssLinks.add(rssLink);
+            }
         }
 
         return rssLinks;
