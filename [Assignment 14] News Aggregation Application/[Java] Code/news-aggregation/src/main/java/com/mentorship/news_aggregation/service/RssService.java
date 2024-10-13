@@ -11,15 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class RssService {
     @Autowired
     private NewsRepository newsRepository; // Inject your News repository
+
+    // A regex pattern that checks for typical RSS-related keywords in the URL
+    private static final Pattern RSS_PATTERN = Pattern.compile(".*(rss|feed|xml|atom).*", Pattern.CASE_INSENSITIVE);
 
     public void fetchAndSaveRssFeed(String rssUrl) {
         try {
@@ -44,23 +47,34 @@ public class RssService {
         }
     }
 
-    public static boolean isRSSLink(String urlString) {
-        try {
-            // Create a URL object
-            URL url = new URL(urlString);
-
-            // Use ROME to parse the feed
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build(new XmlReader(url));
-
-            // If feed parsing is successful, it is an RSS or Atom feed
-            return true;
-
-        } catch (IllegalArgumentException | FeedException | IOException e) {
-            // If an exception is thrown, it is not a valid RSS/Atom feed
+    public static boolean isRssLink(String urlString, SyndFeedInput input) {
+        // First check the URL pattern
+        if (!RSS_PATTERN.matcher(urlString).find()) {
             return false;
         }
+
+        HttpURLConnection connection = null;
+
+        try {
+            URL url = new URL(urlString);
+
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(10000); // Set a timeout for the connection
+            connection.setReadTimeout(10000);
+
+            SyndFeed syndFeed = input.build(new XmlReader(url));
+
+            return true;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.disconnect(); // Ensure the connection is closed
+            }
+        }
+
+        return false; // Not a valid RSS feed
     }
+
 
     // Phương thức lấy RSS feed từ URL
     private SyndFeed getFeedFromUrl(String rssUrl) {
