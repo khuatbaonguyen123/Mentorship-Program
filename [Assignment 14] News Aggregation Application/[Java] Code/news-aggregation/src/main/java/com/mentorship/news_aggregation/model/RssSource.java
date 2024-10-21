@@ -19,14 +19,17 @@ public class RssSource {
     @Column(name = "website_url", nullable = false)
     private String websiteUrl;
 
-    @OneToMany(mappedBy = "rssSource", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Rss> rssFeeds = new ArrayList<>();
+    @OneToMany(mappedBy = "rssSource")
+    private List<Rss> rssFeeds;
 
-    public RssSource() {}
+    public RssSource() {
+        rssFeeds = new ArrayList<>();
+    }
 
     public RssSource(String name, String websiteUrl) {
         this.name = name;
         this.websiteUrl = websiteUrl;
+        rssFeeds = new ArrayList<>();
     }
 
     // Getters and Setters

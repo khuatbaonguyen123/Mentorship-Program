@@ -2,7 +2,9 @@ package com.mentorship.news_aggregation.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "news")
@@ -25,13 +27,11 @@ public class News {
     @JoinColumn(name = "rss_id")
     private Rss rss;
 
-    public News() {}
+    @OneToMany(mappedBy = "news")
+    private List<NewsTag> newsTags;
 
-    public News(String title, String description, String link, String guid, LocalDateTime pubDate, Rss rss) {
-        this.title = title;
-        this.description = description;
-        this.link = link;
-        this.rss = rss;
+    public News() {
+        newsTags = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -76,4 +76,11 @@ public class News {
         this.rss = rss;
     }
 
+    public List<NewsTag> getNewsTags() {
+        return newsTags;
+    }
+
+    public void setNewsTags(List<NewsTag> newsTags) {
+        this.newsTags = newsTags;
+    }
 }
