@@ -22,16 +22,13 @@ public class RssSourceService {
     public List<String> getRssLinksFromUrl(String url) throws IOException {
         List<String> rssLinks = new ArrayList<>();
 
-        // Fetch the HTML from the URL
         Document doc = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
                 .header("Accept-Language", "*")
                 .get();
 
-        // Look for 'link' tags that have rel='alternate' and type='application/rss+xml'
         Elements rssElements = doc.getElementsByTag("a");
 
-        // Extract the href attribute of each RSS link
         for (Element element : rssElements) {
             String rssLink = element.absUrl("href");
             if(RssService.isRssLink(rssLink, syndFeedInput)) {

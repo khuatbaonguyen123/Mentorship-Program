@@ -1,27 +1,31 @@
 package com.mentorship.news_aggregation.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "news")
+@Table(name = "News")
 public class News {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "description", nullable = true)
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "link", nullable = false)
     private String link;
+
+    @Column(name = "guid", nullable = true)
+    private String guid;
+
+    @Column(name = "views_count", nullable = true)
+    private Integer viewsCount;
 
     @ManyToOne
     @JoinColumn(name = "rss_id")
@@ -32,14 +36,14 @@ public class News {
 
     public News() {
         newsTags = new ArrayList<>();
+        viewsCount = 0;
     }
 
-    // Getters and Setters
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -67,6 +71,21 @@ public class News {
         this.link = link;
     }
 
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    public Integer getViewsCount() {
+        return viewsCount;
+    }
+
+    public void setViewsCount(Integer viewsCount) {
+        this.viewsCount = viewsCount;
+    }
 
     public Rss getRss() {
         return rss;

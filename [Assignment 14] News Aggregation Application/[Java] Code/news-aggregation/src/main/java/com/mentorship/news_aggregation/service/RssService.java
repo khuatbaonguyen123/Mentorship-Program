@@ -19,26 +19,30 @@ import java.util.regex.Pattern;
 @Service
 public class RssService {
     @Autowired
-    private NewsRepository newsRepository; // Inject your News repository
+    private NewsRepository newsRepository;
+
+    @Autowired
+    private TagService tagService;
 
     // A regex pattern that checks for typical RSS-related keywords in the URL
     private static final Pattern RSS_PATTERN = Pattern.compile(".*(rss|feed|xml|atom).*", Pattern.CASE_INSENSITIVE);
 
     public void fetchAndSaveRssFeed(String rssUrl) {
         try {
-            // Lấy feed từ RSS URL
             SyndFeed feed = getFeedFromUrl(rssUrl);
-            
-            // Xử lý danh sách bài viết từ RSS feed
+
             List<SyndEntry> entries = feed.getEntries();
 
             for (SyndEntry entry : entries) {
                 News news = new News();
                 news.setTitle(entry.getTitle());
                 news.setDescription(entry.getDescription().getValue());
+                news.setGuid(entry.getUri());
                 news.setLink(entry.getLink());
 
-                newsRepository.save(news); // Save news item to the database
+                newsRepository.save(news);
+
+                tagService.scrapeTagsFromNewsLink(entry.getLink());
             }
 
         } catch (Exception e) {
@@ -68,22 +72,20 @@ public class RssService {
             return true;
         } catch (Exception e) {
             if (connection != null) {
-                connection.disconnect(); // Ensure the connection is closed
+                connection.disconnect();
             }
         }
 
         return false; // Not a valid RSS feed
     }
 
-
-    // Phương thức lấy RSS feed từ URL
     private SyndFeed getFeedFromUrl(String rssUrl) {
         try {
             URL url = new URL(rssUrl);
             SyndFeedInput input = new SyndFeedInput();
             return input.build(new XmlReader(url));
         } catch (FeedException | IOException e) {
-            throw new RuntimeException("Lỗi khi đọc RSS feed từ URL: " + rssUrl, e);
+            throw new RuntimeException("Error reading feeds from RSS url: " + rssUrl, e);
         }
     }
 }
