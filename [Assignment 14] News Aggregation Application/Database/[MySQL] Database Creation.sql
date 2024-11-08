@@ -3,61 +3,55 @@ CREATE DATABASE news_aggregation;
 USE news_aggregation;
 
 CREATE TABLE `User` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `full_name` varchar(255),
   `email` varchar(255) UNIQUE,
   `password` varchar(255)
 );
 
 CREATE TABLE `News` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `title` varchar(255),
   `description` text,
   `link` varchar(255),
   `guid` varchar(255),
   `pub_date` datetime,
   `rss_id` integer,
-  `views_count` integer,
-  `created_at` datetime,
-  `updated_at` datetime
+  `views_count` integer
 );
 
 CREATE TABLE `User_News_Interaction` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `user_id` integer,
   `news_id` integer,
-  `type_interaction` enum ('View') DEFAULT 'View',
-  `created_at` datetime
+  `type_interaction` enum ('View') DEFAULT 'View'
 );
 
 CREATE TABLE `RSS` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `title` varchar(255),
   `link` varchar(255),
   `description` text,
   `language` varchar(255),
   `pub_date` datetime,
-  `source_id` integer,
-  `created_at` datetime,
-  `updated_at` datetime,
-  `extra_fields` json
+  `source_id` integer
 );
 
 CREATE TABLE `Rss_Source` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255),
   `website_url` varchar(255)
 );
 
 CREATE TABLE `Tag` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) UNIQUE,
   `views_count` integer,
   `saves_count` integer
 );
 
 CREATE TABLE `User_Tag_Interaction` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `user_id` integer,
   `tag_id` integer,
   `interaction_type` enum ('View', 'Save'),
@@ -65,7 +59,7 @@ CREATE TABLE `User_Tag_Interaction` (
 );
 
 CREATE TABLE `News_Tag` (
-  `id` integer PRIMARY KEY,
+  `id` integer PRIMARY KEY AUTO_INCREMENT,
   `news_id` integer,
   `tag_id` integer
 );
